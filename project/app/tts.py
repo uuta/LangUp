@@ -6,6 +6,7 @@ TTS_API_URL = "https://api.openai.com/v1/tts"  # 適切なTTSエンドポイン�
 
 API_KEY = os.getenv("OPENAI_API_KEY")
 
+
 async def get_tts(text: str) -> str:
     """
     Sends a request to the TTS service and returns the audio URL.
@@ -13,15 +14,9 @@ async def get_tts(text: str) -> str:
     if not API_KEY:
         raise ValueError("API key for TTS is not set.")
 
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 
-    payload = {
-        "text": text,
-        "voice": "en-US-Wavenet-D"  # 適宜選択
-    }
+    payload = {"text": text, "voice": "en-US-Wavenet-D"}  # 適宜選択
 
     async with aiohttp.ClientSession() as session:
         async with session.post(TTS_API_URL, headers=headers, json=payload) as response:
