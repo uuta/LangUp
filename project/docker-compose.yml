@@ -6,5 +6,5 @@ services:
       - "8400:8400"
     volumes:
       - ./app:/usr/src/app
-    environment:
-      - OPENAI_API_KEY=your_openai_api_key
+    env_file:
+      - ./.env
