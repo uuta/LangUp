@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 # Copy the application files into the container
 COPY ./app /usr/src/app
 
+# Set the environment variable
+ENV PYTHONPATH=/usr/src/app
+
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
