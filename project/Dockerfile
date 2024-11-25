@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 
 # Copy the application files into the container
 COPY ./app /usr/src/app
+COPY ./app/requirements.txt /usr/src/app/requirements.txt
 
 # Set the environment variable
 ENV PYTHONPATH=/usr/src/app
