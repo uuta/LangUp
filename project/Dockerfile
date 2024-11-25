@@ -8,8 +8,7 @@ WORKDIR /usr/src/app
 COPY ./app /usr/src/app
 COPY ./app/requirements.txt /usr/src/app/requirements.txt
 
-# Set the environment variable
-ENV PYTHONPATH=/usr/src/app
+ENV PYTHONPATH=/usr/src
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -18,4 +17,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8400
 
 # Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8400", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8400", "--reload"]

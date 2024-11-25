@@ -7,7 +7,7 @@ cd project
 # Create main.py
 cat > app/main.py <<EOL
 from fastapi import FastAPI, HTTPException
-from app.tts import get_tts
+from tts import get_tts
 
 app = FastAPI()
 
