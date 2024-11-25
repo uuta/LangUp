@@ -3,3 +3,4 @@ aiohttp
 uvicorn
 python-dotenv
 openai
+boto3
