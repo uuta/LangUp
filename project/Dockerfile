@@ -2,16 +2,16 @@
 FROM python:3.10-slim
 
 # Set the working directory in the container
-WORKDIR /usr/src
+WORKDIR /usr/src/app
 
 # Copy the application files into the container
-COPY ./app /usr/src
+COPY ./app /usr/src/app
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 8400
-EXPOSE 8400
+# Expose port 10000
+EXPOSE 10000
 
 # Command to run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8400", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000", "--reload"]

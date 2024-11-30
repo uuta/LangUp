@@ -31,4 +31,4 @@ async def get_tts(text: str) -> str:
     with open(file_path, "wb") as f:
         f.write(data["audio_content"].encode("latin1"))  # 適宜エンコード調整
 
-    return f"http://localhost:8400/static/{file_name}"
+    return f"http://localhost:10000/static/{file_name}"
