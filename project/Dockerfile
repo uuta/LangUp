@@ -2,13 +2,10 @@
 FROM python:3.10-slim
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /usr/src
 
 # Copy the application files into the container
-COPY ./app /usr/src/app
-COPY ./app/requirements.txt /usr/src/app/requirements.txt
-
-ENV PYTHONPATH=/usr/src
+COPY ./app /usr/src
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
