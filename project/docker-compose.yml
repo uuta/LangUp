@@ -4,5 +4,7 @@ services:
     build: .
     ports:
       - "10000:10000"
+    volumes:
+      - ./app:/usr/src/app
     env_file:
       - ./.env

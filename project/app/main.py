@@ -6,6 +6,7 @@ from pathlib import Path
 import uuid
 import os
 from dotenv import load_dotenv
+from fastapi.responses import HTMLResponse
 
 # 環境変数からAWSの設定を読み込み
 load_dotenv()
@@ -68,3 +69,13 @@ async def generate_speech(request: SpeechRequest):
         raise HTTPException(
             status_code=500, detail=f"Error generating speech: {str(e)}"
         )
+
+
+@app.get("/privacy-policy", response_class=HTMLResponse)
+async def privacy_policy():
+    try:
+        with open("static/privacy_policy.html", "r", encoding="utf-8") as file:
+            content = file.read()
+        return HTMLResponse(content=content)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Privacy Policy not found")
