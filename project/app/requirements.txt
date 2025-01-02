@@ -4,3 +4,4 @@ uvicorn
 python-dotenv
 openai
 boto3
+azure-cognitiveservices-speech

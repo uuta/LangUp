@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
-from openai import OpenAI
+import os
 
-client = OpenAI()
+import azure.cognitiveservices.speech as speechsdk
+from dotenv import load_dotenv
 
 # 環境変数の読み込み
 load_dotenv()
@@ -9,8 +9,7 @@ load_dotenv()
 
 async def generate_tts_audio(text: str) -> str:
     """
-    OpenAI TTS APIを使用して音声ファイルを生成し、ローカルに保存する関数。
-    See: https://platform.openai.com/docs/api-reference/audio/createSpeech#audio-createspeech-voice
+    Microsoft Azure Speech SDKを使用して音声ファイルを生成し、ローカルに保存する関数。
 
     Args:
         text (str): 音声生成の元になるテキスト
@@ -19,16 +18,32 @@ async def generate_tts_audio(text: str) -> str:
         str: 保存された音声ファイルのローカルパス
     """
     try:
-        # OpenAI TTS APIへのリクエスト
-        response = client.audio.speech.create(
-            model="tts-1", input=text, voice="onyx", speed=1.25
+        # Azure Speech Key & Region
+        speech_key = os.getenv("AZURE_SPEECH_KEY")
+        service_region = os.getenv("AZURE_REGION")
+
+        # Azure Speech Config
+        speech_config = speechsdk.SpeechConfig(
+            subscription=speech_key, region=service_region
+        )
+        speech_config.speech_synthesis_voice_name = "en-US-DavisNeural"  # voice name
+
+        # tmp file
+        normalized_text = text.replace(" ", "_")
+        file_name = f"{normalized_text}.mp3"
+        file_path = f"/tmp/{file_name}"
+
+        # Generate audio
+        audio_config = speechsdk.audio.AudioOutputConfig(filename=file_path)
+        synthesizer = speechsdk.SpeechSynthesizer(
+            speech_config=speech_config, audio_config=audio_config
         )
 
-        # ユニークなファイル名を生成
-        file_name = f"{text}.mp3"
-        file_path = f"/tmp/{file_name}"  # 一時ファイルディレクトリに保存
+        # Execute TTS
+        result = synthesizer.speak_text_async(text).get()
 
-        response.stream_to_file(file_path)
+        if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
+            raise Exception(f"Speech synthesis failed: {result.reason}")
 
         return file_path
 
