@@ -26,7 +26,12 @@ async def generate_tts_audio(text: str) -> str:
         speech_config = speechsdk.SpeechConfig(
             subscription=speech_key, region=service_region
         )
-        speech_config.speech_synthesis_voice_name = "en-US-DavisNeural"  # voice name
+        # voice name
+        speech_config.speech_synthesis_voice_name = "en-US-DavisNeural"
+        # Enhance the quality of the audio
+        speech_config.set_speech_synthesis_output_format(
+            speechsdk.SpeechSynthesisOutputFormat.Audio24Khz160KBitRateMonoMp3
+        )
 
         # tmp file
         normalized_text = text.replace(" ", "_")
