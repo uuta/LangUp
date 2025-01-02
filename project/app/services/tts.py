@@ -1,7 +1,5 @@
-import uuid
 from dotenv import load_dotenv
 from openai import OpenAI
-from pathlib import Path
 
 client = OpenAI()
 
@@ -21,14 +19,13 @@ async def generate_tts_audio(text: str) -> str:
         str: 保存された音声ファイルのローカルパス
     """
     try:
-
         # OpenAI TTS APIへのリクエスト
         response = client.audio.speech.create(
             model="tts-1", input=text, voice="onyx", speed=1.25
         )
 
         # ユニークなファイル名を生成
-        file_name = f"{uuid.uuid4()}.mp3"
+        file_name = f"{text}.mp3"
         file_path = f"/tmp/{file_name}"  # 一時ファイルディレクトリに保存
 
         response.stream_to_file(file_path)

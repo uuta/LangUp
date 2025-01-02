@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
-from models.speech_request import SpeechRequest
-from services.tts import generate_tts_audio
-from services.s3 import upload_to_s3
-from fastapi.responses import HTMLResponse
 import os
+
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import HTMLResponse
+from models.speech_request import SpeechRequest
+from services.s3 import upload_to_s3
+from services.tts import generate_tts_audio
 
 router = APIRouter()
 
