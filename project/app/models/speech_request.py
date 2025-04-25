@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict
+from typing import TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -16,8 +16,15 @@ class LanguageCode(str, Enum):
     # GERMAN = "de-DE"
 
 
+class LanguageMetadata(TypedDict):
+    """Type definition for language metadata."""
+
+    name: str  # Human-readable language name
+    voice_name: str  # TTS voice identifier
+
+
 # Language metadata including voice names and other properties
-LANGUAGE_METADATA: Dict[LanguageCode, Dict[str, Any]] = {
+LANGUAGE_METADATA: dict[LanguageCode, LanguageMetadata] = {
     LanguageCode.ENGLISH: {
         "name": "English (US)",
         "voice_name": "en-US-DavisNeural",
