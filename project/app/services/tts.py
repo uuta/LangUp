@@ -3,16 +3,19 @@ import os
 import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv
 
+from models.speech_request import LANGUAGE_METADATA, LanguageCode
+
 # 環境変数の読み込み
 load_dotenv()
 
 
-async def generate_tts_audio(text: str) -> str:
+async def generate_tts_audio(text: str, lang_code: LanguageCode) -> str:
     """
     Microsoft Azure Speech SDKを使用して音声ファイルを生成し、ローカルに保存する関数。
 
     Args:
         text (str): 音声生成の元になるテキスト
+        lang_code (LanguageCode): 音声生成に使用する言語コード
 
     Returns:
         str: 保存された音声ファイルのローカルパス
@@ -27,15 +30,20 @@ async def generate_tts_audio(text: str) -> str:
             subscription=speech_key, region=service_region
         )
         # voice name
-        speech_config.speech_synthesis_voice_name = "en-US-DavisNeural"
+        speech_config.speech_synthesis_voice_name = LANGUAGE_METADATA[lang_code][
+            "voice_name"
+        ]
         # Enhance the quality of the audio
         speech_config.set_speech_synthesis_output_format(
             speechsdk.SpeechSynthesisOutputFormat.Audio24Khz160KBitRateMonoMp3
         )
 
         # tmp file
-        normalized_text = text.replace(" ", "_")
-        file_name = f"{normalized_text}.mp3"
+        import hashlib
+
+        # テキストをハッシュ化してファイル名を生成（SHA-256を使用）
+        text_hash = hashlib.sha256(text.encode()).hexdigest()
+        file_name = f"{text_hash}.mp3"
         file_path = f"/tmp/{file_name}"
 
         # Generate audio
