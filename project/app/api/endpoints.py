@@ -6,12 +6,20 @@ from models.speech_request import SpeechRequest
 from services.s3 import upload_to_s3
 from services.tts import generate_tts_audio
 from models.speech_request import LanguageCode
+from pydantic import BaseModel, Field
 
 router = APIRouter()
 
 
-@router.post("/generate-speech/")
-async def generate_speech(request: SpeechRequest) -> dict:
+class SpeechResponse(BaseModel):
+    file_url: str = Field(
+        description="URL of the generated speech audio file",
+        examples=["https://langup-bucket.s3.amazonaws.com/speech/abcdef1234567890.mp3"],
+    )
+
+
+@router.post("/generate-speech/", response_model=SpeechResponse)
+async def generate_speech(request: SpeechRequest) -> SpeechResponse:
     try:
         # TTS音声生成
         local_audio_path = await generate_tts_audio(
@@ -24,7 +32,7 @@ async def generate_speech(request: SpeechRequest) -> dict:
         # ローカルファイルを削除
         os.remove(local_audio_path)
 
-        return {"file_url": s3_url}
+        return SpeechResponse(file_url=s3_url)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
