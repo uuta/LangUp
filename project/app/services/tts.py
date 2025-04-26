@@ -41,8 +41,8 @@ async def generate_tts_audio(text: str, lang_code: LanguageCode) -> str:
         # tmp file
         import hashlib
 
-        # テキストをハッシュ化してファイル名を生成
-        text_hash = hashlib.md5(text.encode()).hexdigest()
+        # テキストをハッシュ化してファイル名を生成（SHA-256を使用）
+        text_hash = hashlib.sha256(text.encode()).hexdigest()
         file_name = f"{text_hash}.mp3"
         file_path = f"/tmp/{file_name}"
 
